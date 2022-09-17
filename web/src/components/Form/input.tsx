@@ -5,8 +5,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 export function Input(props: InputProps) {
   return (
     <input
-      id='game'
-      placeholder='Selecione o game que deseja jogar'
+      {...props}
       className='bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500'
     />
   )
