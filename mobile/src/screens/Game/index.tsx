@@ -10,10 +10,12 @@ import { TouchableOpacity, View, Image, FlatList, Text } from 'react-native';
 import { THEME } from '../../theme';
 import { Heading } from '../../components/Heading';
 import { DuoCard, DuoCardProps } from '../../components/DuoCard';
+import { DuoMatch } from '../../components/DuoMatch';
 
 export function Game() {
 
   const [duos, setDuos] = useState<DuoCardProps[]>([])
+  const [discordDuoSeleted, setDiscordDuoSeleted] = useState('')
 
   const navigation = useNavigation()
   const route = useRoute()
@@ -23,8 +25,14 @@ export function Game() {
     navigation.goBack()
   }
 
+  async function getDiscordUser(adsId: string) {
+    fetch(`http://192.168.0.114:3333/ads/${adsId}/discord`)
+      .then(response => response.json())
+      .then(data => setDiscordDuoSeleted(data.discord))
+  }
+
   useEffect(() => {
-    fetch(`http://192.168.0.198:3333/games/${game.id}/ads`)
+    fetch(`http://192.168.0.114:3333/games/${game.id}/ads`)
       .then(response => response.json())
       .then(data => setDuos(data))
   }, [])
@@ -65,7 +73,7 @@ export function Game() {
           renderItem={({item}) => (
             <DuoCard
               data={duos[0]}
-              onConnect={() => {}}
+              onConnect={() => getDiscordUser(item.id)}
             />
           )}
           horizontal
@@ -77,6 +85,12 @@ export function Game() {
               Ainda não temos anúncios publicados para esse jogo.
             </Text>
           )}
+        />
+
+        <DuoMatch 
+          visible={discordDuoSeleted. length > 0}
+          discord={discordDuoSeleted}
+          onClose={() => setDiscordDuoSeleted('')}
         />
 
       </SafeAreaView>

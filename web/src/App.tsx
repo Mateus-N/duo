@@ -5,6 +5,7 @@ import logoImg from './assets/logo-nlw-esports.svg'
 import { CreateAdBanner } from './components/CreateAdBanner'
 import { GameBanner } from './components/GameBanner'
 import { CreateAdModal } from './components/CreateAdModal'
+import axios from 'axios'
 
 interface Game {
   id: string,
@@ -20,11 +21,9 @@ function App() {
   const [games, setGames] = useState<Game[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3333/games')
-      .then(response => response.json())
-      .then(data => {
-        setGames(data)
-      })
+    axios('http://localhost:3333/games').then(response => {
+      setGames(response.data)
+    })
   }, [])
 
   return (
@@ -33,7 +32,7 @@ function App() {
 
       <h1 className='text-6xl text-white font-black mt-20'>Seu <span className='bg-nlw-gradient bg-clip-text text-transparent'>duo</span> está aqui.</h1>
 
-      <div className='grid grid-cols-6 gap-6 mt-16'>
+      <div className='grid grid-cols-6 gap-6 mt-16 mx-2'>
         {games.map(game => {
           return (
             <GameBanner
